@@ -15,11 +15,12 @@ unsigned int get_individual_count(const char* vcf_path) {
     vcf_file.open(vcf_path);
         std::string line;
         while (std::getline(vcf_file, line)) { //? prende solo la prima riga?
+                                                // --> no il get line in teoria scorre le righe, con il line.front() checka il commento. Alla fine arriva alla prima riga senza commento
             if (line.front() == '#') continue;
-            auto split_line = split_string(line, '\t');
-            return split_line.size() - 9; // perché splitta e poi conta? e' sufficiente contare il numero di /t
+            auto split_line = split_string(line, '\t'); // se non trova un commento, splitta la riga sui tab
+            return split_line.size() - 9; // perché splitta e poi conta? e' sufficiente contare il numero di /t -- corretto, implementazione del tipo boh, gli viene meglio con la split, francese bufu
+            //
         }
-    }
 
     // if nothing was returned ...
     std::cerr << "Could not find or found unexpected content in file "
